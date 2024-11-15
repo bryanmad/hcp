@@ -440,6 +440,10 @@ allowance<div id="allowance100" onclick="changeallowance(this.id)">95%</div>
         arrRedRating = resultsarray.map(d => d.redrating);
         arrRedPar = resultsarray.map(d => d.redpar);		
         
+        arrBlueSlope = resultsarray.map(d => d.blueslope);
+        arrBlueRating = resultsarray.map(d => d.bluerating);
+        arrBluePar = resultsarray.map(d => d.bluepar); 
+          
         // remove null items
         arrCourse = arrCourse.filter(function(el) {return el != null;})
                 
@@ -455,6 +459,10 @@ allowance<div id="allowance100" onclick="changeallowance(this.id)">95%</div>
         arrRedRating = arrRedRating.filter(function(el) {return el != null;})
         arrRedPar = arrRedPar.filter(function(el) {return el != null;})
         	
+        arrBlueSlope = arrBlueSlope.filter(function(el) {return el != null;})
+        arrBlueRating = arrBlueRating.filter(function(el) {return el != null;})
+        arrBluePar = arrBluePar.filter(function(el) {return el != null;}) 
+          
         // remove empty items
         arrCourse = arrCourse.filter(function(el) {return el != "";})
                 
@@ -470,6 +478,12 @@ allowance<div id="allowance100" onclick="changeallowance(this.id)">95%</div>
         arrRedRating = arrRedRating.filter(function(el) {return el != "";})
         arrRedPar = arrRedPar.filter(function(el) {return el != "";})
         
+        arrBlueSlope = arrBlueSlope.filter(function(el) {return el != "";})
+        arrBlueRating = arrBlueRating.filter(function(el) {return el != "";})
+        arrBluePar = arrBluePar.filter(function(el) {return el != "";}) 
+          
+          
+          
         // put correct wording back - signifies download completed
 	     document.getElementById("dropbtn").innerText = "select course"
 	
@@ -606,18 +620,74 @@ console.log(course + " " + arrCourse[0])
 
 		function changetee(id) {
 			// change dot color
-			// red to white, white to yellow, yellow to red
-         if(document.getElementById(id).style.background == "red") {			
-            redtowhite(id);
-         } else if (document.getElementById(id).style.background == "white") {			
-            whitetoyellow(id);
-         } else if (document.getElementById(id).style.background == "yellow") {			
-            yellowtored(id);
-         } else {
-            console.log("error: no tee color")
-         }
+			// default is red to white, white to yellow, yellow to red
+            // westerhope special case includes blue tees
+            // so is red to blue, blue to white, white to yellow, yellow to red
+         if (globalcourse == "Westerhope") {
+            if(document.getElementById(id).style.background == "red") {			
+               redtoblue(id);
+            } else if (document.getElementById(id).style.background == "blue") {   
+               bluetowhite(id);
+            } else if (document.getElementById(id).style.background == "white") {			
+               whitetoyellow(id);
+            } else if (document.getElementById(id).style.background == "yellow") {			
+               yellowtored(id);
+            } else {
+               console.log("error: no tee color")
+            }
+            
+         } else {    
+             
+            if(document.getElementById(id).style.background == "red") {			
+               redtowhite(id);
+            } else if (document.getElementById(id).style.background == "white") {			
+               whitetoyellow(id);
+            } else if (document.getElementById(id).style.background == "yellow") {			
+               yellowtored(id);
+            } else {
+               console.log("error: no tee color")
+            }
+         }     
      }    
          
+            
+     function redtoblue(id) {   
+			if(document.getElementById(id).style.background == "red") {
+				document.getElementById(id).style.background = "blue"
+				document.getElementById(id).style.color = "blue"
+					// insert new slope, cr and par in correct place
+				var teenum = id.replace("teecolor", "");
+				for(var k = 0; k < arrCourse.length; k++) {
+					if(arrCourse[k] == globalcourse) {
+						document.getElementById("nslope" + teenum).value = arrBlueSlope[k];
+						document.getElementById("ncr" + teenum).value = arrBlueRating[k];
+						document.getElementById("npar" + teenum).value = arrBluePar[k];
+					}
+				}
+		   }
+        updatehcp();
+     }	       
+            
+            
+     function bluetowhite(id) {   
+			if(document.getElementById(id).style.background == "blue") {
+				document.getElementById(id).style.background = "white"
+				document.getElementById(id).style.color = "white"
+					// insert new slope, cr and par in correct place
+				var teenum = id.replace("teecolor", "");
+				for(var k = 0; k < arrCourse.length; k++) {
+					if(arrCourse[k] == globalcourse) {
+						document.getElementById("nslope" + teenum).value = arrWhiteSlope[k];
+						document.getElementById("ncr" + teenum).value = arrWhiteRating[k];
+						document.getElementById("npar" + teenum).value = arrWhitePar[k];
+					}
+				}
+		   }
+        updatehcp();
+     }	       
+            
+            
+            
      function redtowhite(id) {   
 			if(document.getElementById(id).style.background == "red") {
 				document.getElementById(id).style.background = "white"
